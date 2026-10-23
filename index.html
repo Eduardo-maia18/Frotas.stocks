@@ -21,7 +21,10 @@
   <div class="brand"><div class="logo">⚙</div><div><strong>FrotaStock</strong><small>Controle de peças</small></div></div>
   <nav class="nav" aria-label="Navegação">
     <button class="active" data-view="dashboard">▦ <span>Visão geral</span></button>
-    <button data-view="stock">▤ <span>Peças em estoque</span></button>
+    <button data-view="stock">▤ <span>Todo o estoque</span></button>
+    <button data-view="forklifts">♧ <span>Empilhadeiras</span></button>
+    <button data-view="trucks">▰ <span>Caminhões</span></button>
+    <button data-view="cars">🚗 <span>Carros</span></button>
     <button data-view="history">↔ <span>Movimentações</span></button>
     <button data-view="rcs">▣ <span>Conferência de RCs</span></button>
   </nav>
@@ -45,10 +48,22 @@
     <section id="stock" class="hidden">
       <div class="pagehead"><div><h1>Peças em estoque</h1><p>Consulte saldos, categorias e status de reposição.</p></div><button class="btn primary" onclick="openPartModal()">＋ Cadastrar peça</button></div>
       <div class="panel">
-        <div class="filters"><div class="searchwrap"><span>⌕</span><input id="search" class="search" placeholder="Buscar por nome, código ou descrição…" oninput="renderStock()"></div><select id="catFilter" onchange="renderStock()"><option value="">Todas as categorias</option><option>Leves</option><option>Pesados</option><option>Extrapesados</option></select><select id="statusFilter" onchange="renderStock()"><option value="">Todos os status</option><option value="ok">Disponível</option><option value="low">Estoque baixo</option><option value="out">Sem estoque</option></select></div>
+        <div class="filters"><div class="searchwrap"><span>⌕</span><input id="search" class="search" placeholder="Buscar por nome, código ou descrição…" oninput="renderStock()"></div><select id="catFilter" onchange="renderStock()"><option value="">Todas as categorias</option><option>Empilhadeiras</option><option>Caminhões</option><option>Carros</option></select><select id="statusFilter" onchange="renderStock()"><option value="">Todos os status</option><option value="ok">Disponível</option><option value="low">Estoque baixo</option><option value="out">Sem estoque</option></select></div>
         <div class="tablewrap"><table><thead><tr><th>Peça</th><th>Categoria</th><th>Saldo</th><th>Estoque mínimo</th><th>Status</th><th>Ações</th></tr></thead><tbody id="stockRows"></tbody></table></div>
         <div class="footnote">As quantidades deste protótipo são demonstrativas. Confira os registros antes de usar em qualquer processo real.</div>
       </div>
+    </section>
+    <section id="forklifts" class="hidden">
+      <div class="pagehead"><div><h1>Estoque de empilhadeiras</h1><p>Peças exclusivas das empilhadeiras, separadas dos demais veículos.</p></div><button class="btn primary" onclick="openPartModalForCategory('Empilhadeiras')">＋ Cadastrar peça</button></div>
+      <div class="panel"><div class="filters"><div class="searchwrap"><span>⌕</span><input id="searchForklifts" class="search" placeholder="Buscar peça ou código…" oninput="renderCategoryStock('forklifts','Empilhadeiras')"></div><select id="statusForklifts" onchange="renderCategoryStock('forklifts','Empilhadeiras')"><option value="">Todos os status</option><option value="ok">Disponível</option><option value="low">Estoque baixo</option><option value="out">Sem estoque</option></select></div><div class="tablewrap"><table><thead><tr><th>Peça</th><th>Categoria</th><th>Saldo</th><th>Estoque mínimo</th><th>Status</th><th>Ações</th></tr></thead><tbody id="forkliftsRows"></tbody></table></div></div>
+    </section>
+    <section id="trucks" class="hidden">
+      <div class="pagehead"><div><h1>Estoque de caminhões</h1><p>Peças de caminhões organizadas em uma página exclusiva.</p></div><button class="btn primary" onclick="openPartModalForCategory('Caminhões')">＋ Cadastrar peça</button></div>
+      <div class="panel"><div class="filters"><div class="searchwrap"><span>⌕</span><input id="searchTrucks" class="search" placeholder="Buscar peça ou código…" oninput="renderCategoryStock('trucks','Caminhões')"></div><select id="statusTrucks" onchange="renderCategoryStock('trucks','Caminhões')"><option value="">Todos os status</option><option value="ok">Disponível</option><option value="low">Estoque baixo</option><option value="out">Sem estoque</option></select></div><div class="tablewrap"><table><thead><tr><th>Peça</th><th>Categoria</th><th>Saldo</th><th>Estoque mínimo</th><th>Status</th><th>Ações</th></tr></thead><tbody id="trucksRows"></tbody></table></div></div>
+    </section>
+    <section id="cars" class="hidden">
+      <div class="pagehead"><div><h1>Estoque de carros</h1><p>Peças dos veículos leves organizadas separadamente.</p></div><button class="btn primary" onclick="openPartModalForCategory('Carros')">＋ Cadastrar peça</button></div>
+      <div class="panel"><div class="filters"><div class="searchwrap"><span>⌕</span><input id="searchCars" class="search" placeholder="Buscar peça ou código…" oninput="renderCategoryStock('cars','Carros')"></div><select id="statusCars" onchange="renderCategoryStock('cars','Carros')"><option value="">Todos os status</option><option value="ok">Disponível</option><option value="low">Estoque baixo</option><option value="out">Sem estoque</option></select></div><div class="tablewrap"><table><thead><tr><th>Peça</th><th>Categoria</th><th>Saldo</th><th>Estoque mínimo</th><th>Status</th><th>Ações</th></tr></thead><tbody id="carsRows"></tbody></table></div></div>
     </section>
     <section id="history" class="hidden">
       <div class="pagehead"><div><h1>Histórico de movimentações</h1><p>Consulte entradas e saídas registradas neste navegador.</p></div><button class="btn" onclick="exportCSV()">↓ Exportar CSV</button></div>
@@ -75,13 +90,8 @@
 </div>
 <div id="modalRoot"></div>
 <script>
-const KEY='frotastock_demo_v1';
-const seedParts=[
-{id:1,name:'Filtro de óleo',code:'PEC-001',desc:'Filtro para manutenção preventiva do motor',cat:'Pesados',qty:24,min:8,img:'',unit:'unidade'},
-{id:2,name:'Pastilha de freio',code:'PEC-002',desc:'Componente do sistema de freios',cat:'Leves',qty:4,min:6,img:'',unit:'jogo'},
-{id:3,name:'Filtro de ar',code:'PEC-003',desc:'Elemento filtrante de admissão',cat:'Extrapesados',qty:0,min:5,img:'',unit:'unidade'},
-{id:4,name:'Correia do motor',code:'PEC-004',desc:'Correia de acionamento do motor',cat:'Pesados',qty:12,min:4,img:'',unit:'unidade'}
-];
+const KEY='frotastock_demo_v2';
+const seedParts=[];
 let data=loadData();
 function loadData(){try{const x=JSON.parse(localStorage.getItem(KEY));if(x&&Array.isArray(x.parts)&&Array.isArray(x.moves))return x}catch(e){}return {parts:seedParts,moves:[]}}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(data))}catch(e){toast('Não foi possível salvar. A imagem pode ser grande demais; tente uma imagem menor.');}}
@@ -89,7 +99,7 @@ function generatePartCode(name,cat){
   const normalized=String(name||'').normalize('NFD').replace(/[\\u0300-\\u036f]/g,'').toUpperCase();
   const firstWord=(normalized.match(/[A-Z0-9]+/)||['PEC'])[0];
   const partPrefix=firstWord.slice(0,3).padEnd(3,'X');
-  const categoryPrefix=({'Leves':'LEV','Pesados':'PES','Extrapesados':'EXT'})[cat]||'GER';
+  const categoryPrefix=({'Empilhadeiras':'EMP','Caminhões':'CAM','Carros':'CAR'})[cat]||'GER';
   let n=1,code='';
   do{code=`${partPrefix}-${categoryPrefix}-${String(n).padStart(3,'0')}`;n++}
   while(data.parts.some(item=>item.code.toUpperCase()===code.toUpperCase()));
@@ -100,20 +110,22 @@ function status(p){return p.qty===0?'out':p.qty<=p.min?'low':'ok'}
 function statusHTML(p){const s=status(p);return `<span class="pill ${s}">${s==='out'?'● Sem estoque':s==='low'?'● Estoque baixo':'● Disponível'}</span>`}
 function photo(p){return p.img?`<img class="pieceimg" src="${p.img}" alt="">`:`<div class="pieceimg">⚙</div>`}
 function pieceHTML(p){return `<div class="piece">${photo(p)}<div><strong>${escapeHTML(p.name)}</strong><small>${escapeHTML(p.code)}${p.desc?' · '+escapeHTML(p.desc):''}</small></div></div>`}
-function showView(view){document.querySelectorAll('main section').forEach(s=>s.classList.add('hidden'));document.getElementById(view).classList.remove('hidden');document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===view));document.getElementById('crumb').textContent=({dashboard:'Visão geral',stock:'Peças em estoque',history:'Movimentações',rcs:'Conferência de RCs'})[view];if(view==='stock')renderStock();if(view==='history')renderHistory();window.scrollTo(0,0)}
+function showView(view){document.querySelectorAll('main section').forEach(s=>s.classList.add('hidden'));document.getElementById(view).classList.remove('hidden');document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===view));document.getElementById('crumb').textContent=({dashboard:'Visão geral',stock:'Todo o estoque',forklifts:'Empilhadeiras',trucks:'Caminhões',cars:'Carros',history:'Movimentações',rcs:'Conferência de RCs'})[view];if(view==='stock')renderStock();if(view==='forklifts')renderCategoryStock('forklifts','Empilhadeiras');if(view==='trucks')renderCategoryStock('trucks','Caminhões');if(view==='cars')renderCategoryStock('cars','Carros');if(view==='history')renderHistory();window.scrollTo(0,0)}
 document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',()=>showView(b.dataset.view)));
 function toast(msg){const el=document.getElementById('notice');el.textContent=msg;el.classList.remove('hidden');clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>el.classList.add('hidden'),5000)}
-function render(){renderStats();renderAttention();renderRecent();renderStock();renderHistory()}
+function render(){renderStats();renderAttention();renderRecent();renderStock();renderCategoryStock('forklifts','Empilhadeiras');renderCategoryStock('trucks','Caminhões');renderCategoryStock('cars','Carros');renderHistory()}
 function renderStats(){document.getElementById('s-types').textContent=data.parts.length;document.getElementById('s-units').textContent=data.parts.reduce((a,p)=>a+p.qty,0);document.getElementById('s-low').textContent=data.parts.filter(p=>p.qty>0&&p.qty<=p.min).length;document.getElementById('s-out').textContent=data.parts.filter(p=>p.qty===0).length}
 function renderAttention(){let list=data.parts.filter(p=>status(p)!=='ok').sort((a,b)=>a.qty-b.qty);const el=document.getElementById('attention');if(!list.length){el.innerHTML='<div class="empty">Tudo certo: nenhuma peça abaixo do mínimo.</div>';return}el.innerHTML=`<div class="tablewrap"><table><thead><tr><th>Peça</th><th>Categoria</th><th>Saldo</th><th>Status</th><th></th></tr></thead><tbody>${list.slice(0,5).map(p=>`<tr><td>${pieceHTML(p)}</td><td>${escapeHTML(p.cat)}</td><td><strong>${p.qty} ${escapeHTML(p.unit||'un.')}</strong></td><td>${statusHTML(p)}</td><td><button class="iconbtn" onclick="openMoveModal(${p.id},'Entrada')">＋ Entrada</button></td></tr>`).join('')}</tbody></table></div>`}
 function renderRecent(){const el=document.getElementById('recent');if(!data.moves.length){el.innerHTML='<div class="empty">Ainda não há movimentações. Registre uma entrada ou saída para começar a demonstrar o histórico.</div>';return}el.innerHTML=data.moves.slice(0,4).map(moveHTML).join('')}
 function renderStock(){const body=document.getElementById('stockRows');if(!body)return;const q=(document.getElementById('search')?.value||'').toLowerCase();const cat=document.getElementById('catFilter')?.value||'';const st=document.getElementById('statusFilter')?.value||'';const list=data.parts.filter(p=>(!cat||p.cat===cat)&&(!st||status(p)===st)&&(p.name+' '+p.code+' '+p.desc).toLowerCase().includes(q));if(!list.length){body.innerHTML=`<tr><td colspan="6"><div class="empty">Nenhuma peça encontrada.</div></td></tr>`;return}body.innerHTML=list.map(p=>`<tr><td>${pieceHTML(p)}</td><td>${escapeHTML(p.cat)}</td><td><strong>${p.qty}</strong> ${escapeHTML(p.unit||'un.')}</td><td>${p.min}</td><td>${statusHTML(p)}</td><td><div class="rowactions"><button class="iconbtn" title="Registrar entrada" onclick="openMoveModal(${p.id},'Entrada')">＋</button><button class="iconbtn" title="Registrar saída" onclick="openMoveModal(${p.id},'Saída')">−</button><button class="iconbtn" title="Editar peça" onclick="openPartModal(${p.id})">Editar</button></div></td></tr>`).join('')}
+function renderCategoryStock(view,category){const body=document.getElementById(view+'Rows');if(!body)return;const suffix=({forklifts:'Forklifts',trucks:'Trucks',cars:'Cars'})[view];const q=(document.getElementById('search'+suffix)?.value||'').toLowerCase();const st=document.getElementById('status'+suffix)?.value||'';const list=data.parts.filter(p=>p.cat===category&&(!st||status(p)===st)&&(p.name+' '+p.code+' '+p.desc).toLowerCase().includes(q));if(!list.length){body.innerHTML=`<tr><td colspan="6"><div class="empty">Nenhuma peça cadastrada nesta categoria. Use “Cadastrar peça” para começar.</div></td></tr>`;return}body.innerHTML=list.map(p=>`<tr><td>${pieceHTML(p)}</td><td>${escapeHTML(p.cat)}</td><td><strong>${p.qty}</strong> ${escapeHTML(p.unit||'un.')}</td><td>${p.min}</td><td>${statusHTML(p)}</td><td><div class="rowactions"><button class="iconbtn" title="Registrar entrada" onclick="openMoveModal(${p.id},'Entrada')">＋</button><button class="iconbtn" title="Registrar saída" onclick="openMoveModal(${p.id},'Saída')">−</button><button class="iconbtn" title="Editar peça" onclick="openPartModal(${p.id})">Editar</button></div></td></tr>`).join('')}
+function openPartModalForCategory(category){openPartModal(null,category)}
 function moveHTML(m){return `<div class="historyline"><div class="moveicon ${m.type==='Entrada'?'in':'out'}">${m.type==='Entrada'?'↓':'↑'}</div><div><strong>${escapeHTML(m.name)} <span style="font-weight:500;color:var(--muted)">(${escapeHTML(m.code)})</span></strong><small>${escapeHTML(m.date)} · ${escapeHTML(m.user||'Usuário demonstrativo')}${m.note?' · '+escapeHTML(m.note):''}</small><div style="font-size:12px;color:var(--muted);margin-top:4px">Saldo anterior: ${m.before} · Saldo posterior: ${m.after}</div></div><div class="historyqty" style="color:${m.type==='Entrada'?'var(--green)':'var(--red)'}">${m.type==='Entrada'?'+':'−'}${m.qty}</div></div>`}
 function renderHistory(){const el=document.getElementById('historyRows');if(!el)return;const q=(document.getElementById('historySearch')?.value||'').toLowerCase();const type=document.getElementById('historyType')?.value||'';const list=data.moves.filter(m=>(!type||m.type===type)&&(m.name+' '+m.code+' '+m.note).toLowerCase().includes(q));el.innerHTML=list.length?list.map(moveHTML).join(''):'<div class="empty">Nenhuma movimentação corresponde à pesquisa.</div>'}
-function openPartModal(id){const p=id?data.parts.find(x=>x.id===id):null;const root=document.getElementById('modalRoot');root.innerHTML=`<div class="modalback" onclick="if(event.target===this)closeModal()"><div class="modal"><div class="modalhead"><h2>${p?'Editar peça':'Cadastrar nova peça'}</h2><button class="close" onclick="closeModal()">×</button></div><form id="partForm"><div class="formgrid">
+function openPartModal(id,categoryPreset){const p=id?data.parts.find(x=>x.id===id):null;const selectedCategory=p?.cat||categoryPreset||'Empilhadeiras';const root=document.getElementById('modalRoot');root.innerHTML=`<div class="modalback" onclick="if(event.target===this)closeModal()"><div class="modal"><div class="modalhead"><h2>${p?'Editar peça':'Cadastrar nova peça'}</h2><button class="close" onclick="closeModal()">×</button></div><form id="partForm"><div class="formgrid">
 <div class="field span2"><label>Nome da peça *</label><input name="name" required maxlength="100" value="${escapeHTML(p?.name||'')}" placeholder="Ex.: Filtro de combustível"></div>
 <div class="field"><label>Código automático</label><input name="code" required maxlength="40" value="${escapeHTML(p?.code||'')}" placeholder="Gerado automaticamente" readonly style="background:#f1f5f9;color:#334155"><small style="color:var(--muted)">O sistema gera um código único ao salvar a peça.</small></div>
-<div class="field"><label>Categoria do veículo *</label><select name="cat"><option ${p?.cat==='Leves'?'selected':''}>Leves</option><option ${(!p||p.cat==='Pesados')?'selected':''}>Pesados</option><option ${p?.cat==='Extrapesados'?'selected':''}>Extrapesados</option></select></div>
+<div class="field"><label>Categoria do veículo *</label><select name="cat"><option ${selectedCategory==='Empilhadeiras'?'selected':''}>Empilhadeiras</option><option ${selectedCategory==='Caminhões'?'selected':''}>Caminhões</option><option ${selectedCategory==='Carros'?'selected':''}>Carros</option></select></div>
 <div class="field"><label>Saldo inicial / atual *</label><input name="qty" type="number" min="0" step="1" required value="${p?.qty??0}"></div>
 <div class="field"><label>Estoque mínimo *</label><input name="min" type="number" min="0" step="1" required value="${p?.min??5}"></div>
 <div class="field"><label>Unidade de medida</label><select name="unit">${['unidade','jogo','caixa','litro','par','kit','metro'].map(u=>`<option ${p?.unit===u?'selected':''}>${u}</option>`).join('')}</select></div>
