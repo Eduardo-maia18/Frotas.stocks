@@ -12,10 +12,81 @@
 .rcgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.rcsummary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:14px 0}.rcmetric{border:1px solid var(--line);border-radius:11px;padding:13px;background:#fbfdfb}.rcmetric small{display:block;color:var(--muted);font-size:12px}.rcmetric strong{display:block;font-size:23px;margin-top:4px}.rcstatus{font-weight:750}.rcstatus.ok{color:var(--green)}.rcstatus.bad{color:var(--red)}.rcstatus.warn{color:var(--amber)}.rcqty{width:105px;border:1px solid #dbe4de;border-radius:8px;padding:8px}.rc-help{font-size:12px;color:var(--muted);margin-top:8px}.rc-report{background:#fff;padding:20px;border:1px solid var(--line);border-radius:12px}.rc-report h2{color:var(--green)}
 @media(max-width:950px){.rcgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:560px){.rcgrid,.rcsummary{grid-template-columns:1fr}}
+
+#fs-login{position:fixed;inset:0;z-index:99999;overflow:auto;background:#f3f8f4;color:#103d2d;font-family:Inter,Segoe UI,Arial,sans-serif;display:grid;grid-template-columns:minmax(220px,.9fr) minmax(320px,1.1fr) minmax(240px,.9fr);min-height:100vh}
+#fs-login *{box-sizing:border-box}
+#fs-login .fs-brand{background:linear-gradient(145deg,#064c32,#078d50);color:white;padding:clamp(25px,4vw,55px);display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
+#fs-login .fs-brand:after{content:"🚚";position:absolute;font-size:190px;opacity:.08;right:-20px;bottom:8px}
+#fs-login .fs-logo{font-size:clamp(28px,3vw,39px);font-weight:800;letter-spacing:-1px}
+#fs-login .fs-logo span{color:#b8f1cf}
+#fs-login .fs-tag{font-size:17px;line-height:1.6;margin:20px 0 28px;max-width:330px;color:#e0f6e8}
+#fs-login .fs-features{display:grid;gap:16px}
+#fs-login .fs-feature{display:flex;gap:12px;align-items:center;font-size:14px;color:#effbf3}
+#fs-login .fs-feature i{font-style:normal;background:#ffffff20;border:1px solid #ffffff35;border-radius:10px;padding:10px;font-size:20px}
+#fs-login .fs-center{display:flex;align-items:center;justify-content:center;padding:30px 22px;background:linear-gradient(145deg,#f2f8f4,#eaf3ed)}
+#fs-login .fs-card{width:min(100%,500px);background:#fff;border:1px solid #e0ece5;border-radius:16px;padding:clamp(24px,3vw,38px);box-shadow:0 18px 50px #103d2d12}
+#fs-login .fs-small-logo{text-align:center;font-size:29px;font-weight:800;color:#064c32}
+#fs-login .fs-small-logo span{color:#078d50}
+#fs-login h1{text-align:center;font-size:25px;margin:23px 0 8px;color:#0c4b31}
+#fs-login .fs-intro{text-align:center;color:#537368;line-height:1.55;margin:0 0 27px;font-size:14px}
+#fs-login .fs-field{margin:0 0 17px}
+#fs-login .fs-field label{display:block;font-size:13px;font-weight:700;margin-bottom:8px}
+#fs-login .fs-input{display:flex;align-items:center;border:1px solid #d4e5dc;border-radius:10px;background:#fff;min-height:52px;padding:0 13px;gap:10px}
+#fs-login .fs-input:focus-within{border-color:#078d50;box-shadow:0 0 0 3px #078d5018}
+#fs-login .fs-input input{border:0;outline:0;width:100%;font:inherit;font-size:15px;color:#103d2d;background:transparent}
+#fs-login .fs-hint{font-size:11px;color:#7c938a;margin:6px 0 0}
+#fs-login .fs-button{width:100%;border:0;border-radius:10px;background:linear-gradient(100deg,#07954f,#00a45c);color:#fff;padding:15px;font-weight:750;font-size:16px;cursor:pointer;margin-top:7px}
+#fs-login .fs-forgot{display:block;margin:18px auto 0;border:0;background:none;color:#078d50;font-weight:650;cursor:pointer}
+#fs-login .fs-msg{display:none;margin-top:14px;padding:11px 12px;border-radius:9px;background:#fff4df;color:#805000;font-size:12px;line-height:1.5}
+#fs-login .fs-right{padding:clamp(25px,3vw,42px);background:#f9fcfa;display:flex;flex-direction:column;justify-content:center}
+#fs-login .fs-right h2{font-size:20px;margin:0 0 25px;color:#075336}
+#fs-login .fs-right-item{display:flex;gap:12px;margin-bottom:22px}
+#fs-login .fs-round{width:45px;height:45px;border-radius:50%;background:#d9efe2;color:#08613c;display:grid;place-items:center;font-size:21px;flex-shrink:0}
+#fs-login .fs-right-item b{display:block;margin:4px 0 5px;font-size:14px}
+#fs-login .fs-right-item p{margin:0;color:#466a5a;font-size:12px;line-height:1.6}
+#fs-login .fs-warning{border:1px solid #83cba4;background:#eff9f2;border-radius:12px;padding:15px;color:#315e49;font-size:12px;line-height:1.55}
+#fs-login .fs-warning b{display:block;margin-bottom:5px;color:#08613c;font-size:14px}
+#fs-login .fs-warning p{margin:5px 0}
+@media(max-width:1050px){#fs-login{grid-template-columns:230px minmax(300px,1fr)}#fs-login .fs-right{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:22px}#fs-login .fs-right h2{grid-column:1/-1;margin-bottom:0}#fs-login .fs-right-item{margin-bottom:4px}#fs-login .fs-warning{grid-column:1/-1}}
+@media(max-width:700px){#fs-login{display:flex;flex-direction:column}#fs-login .fs-brand{padding:20px 22px;min-height:auto}#fs-login .fs-tag{margin:10px 0 15px;font-size:14px}#fs-login .fs-features{display:flex;flex-wrap:wrap;gap:10px}#fs-login .fs-feature{font-size:11px}#fs-login .fs-feature i{padding:7px}#fs-login .fs-center{padding:18px 12px}#fs-login .fs-card{padding:23px 19px}#fs-login .fs-right{display:flex;padding:22px}#fs-login .fs-right-item{margin-bottom:15px}}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 </head>
 <body>
+
+<div id="fs-login" aria-label="Tela de login do FrotaStock">
+  <section class="fs-brand">
+    <div class="fs-logo">🚚 Frota<span>Stock</span></div>
+    <div class="fs-tag">Controle de Estoque de Peças e Acessórios da Frota</div>
+    <div class="fs-features">
+      <div class="fs-feature"><i>▤</i><span>Controle de estoque e movimentações</span></div>
+      <div class="fs-feature"><i>⚙</i><span>Peças organizadas por categoria</span></div>
+      <div class="fs-feature"><i>✓</i><span>Conferência e acompanhamento de RCs</span></div>
+    </div>
+  </section>
+  <section class="fs-center">
+    <div class="fs-card">
+      <div class="fs-small-logo">🚚 Frota<span>Stock</span></div>
+      <h1>Acesse sua conta</h1>
+      <p class="fs-intro">Digite sua matrícula e senha para entrar no sistema.</p>
+      <form id="fs-login-form">
+        <div class="fs-field"><label for="fs-matricula">Matrícula</label><div class="fs-input"><span>♙</span><input id="fs-matricula" autocomplete="username" placeholder="Digite sua matrícula" required maxlength="30"></div><div class="fs-hint">Protótipo de demonstração — use dados fictícios.</div></div>
+        <div class="fs-field"><label for="fs-senha">Senha</label><div class="fs-input"><span>🔒</span><input id="fs-senha" type="password" autocomplete="current-password" placeholder="Digite sua senha" required><button type="button" id="fs-toggle" style="border:0;background:none;cursor:pointer" aria-label="Mostrar senha">◉</button></div></div>
+        <button class="fs-button" type="submit">↪ &nbsp; Entrar no FrotaStock</button>
+      </form>
+      <button class="fs-forgot" type="button" id="fs-forgot">Esqueci minha senha</button>
+      <div class="fs-msg" id="fs-msg" role="status"></div>
+    </div>
+  </section>
+  <aside class="fs-right">
+    <h2>Uma gestão de frota mais organizada</h2>
+    <div class="fs-right-item"><div class="fs-round">♙</div><div><b>Acesso individual</b><p>Na versão real, cada funcionário terá sua própria conta.</p></div></div>
+    <div class="fs-right-item"><div class="fs-round">↔</div><div><b>Histórico de movimentações</b><p>Acompanhe entradas, saídas e conferências em um só lugar.</p></div></div>
+    <div class="fs-warning"><b>⚠ Protótipo visual</b><p>Esta tela ainda não valida usuários ou senhas. Ao clicar em entrar, ela apenas abre o site para demonstração.</p><p>Não use senhas reais nem dados confidenciais da empresa.</p></div>
+  </aside>
+</div>
+
 <div class="shell">
 <aside class="side">
   <div class="brand"><div class="logo">⚙</div><div><strong>FrotaStock</strong><small>Controle de peças</small></div></div>
@@ -191,7 +262,29 @@ function buildRCProof(){
  const date=new Date().toLocaleString('pt-BR');document.getElementById('rcProof').innerHTML=`<div class="rc-report"><h2 style="margin:0 0 4px">FrotaStock</h2><h3 style="margin:0 0 14px">Comprovante de conferência de RC</h3><div class="rcgrid"><div><b>Número da RC:</b><br>${escapeHTML(rcCurrentNumber)}</div><div><b>Data da conferência:</b><br>${new Date().toLocaleDateString('pt-BR')}</div><div><b>Data de emissão:</b><br>${escapeHTML(date)}</div><div><b>Responsável:</b><br>________________________________</div></div><div class="rcsummary"><div class="rcmetric"><small>Itens conferidos</small><strong>${checkedCount}</strong></div><div class="rcmetric"><small>Sem divergência</small><strong>${ok}</strong></div><div class="rcmetric"><small>Com divergência / pendentes</small><strong>${bad} / ${pending}</strong></div></div><div class="tablewrap"><table><thead><tr><th>Código</th><th>Descrição</th><th>Qtd. na planilha</th><th>Qtd. conferida</th><th>Diferença</th><th>Resultado</th></tr></thead><tbody>${rows}</tbody></table></div><p><b>Observações / providências:</b> __________________________________________________________________________</p><div style="display:grid;grid-template-columns:1fr 1fr;gap:30px;margin-top:36px"><div style="text-align:center;border-top:1px solid #6b756f;padding-top:7px">Responsável pela conferência</div><div style="text-align:center;border-top:1px solid #6b756f;padding-top:7px">Validação / ciência</div></div><p class="rc-help">Relatório interno gerado a partir da planilha importada e das quantidades preenchidas durante a conferência. Não substitui o documento oficial da RC.</p></div>`;
  document.getElementById('rcProofPanel').classList.remove('hidden');document.getElementById('rcProofPanel').scrollIntoView({behavior:'smooth',block:'start'});
 }
-function printRCProof(){if(!document.getElementById('rcProof').innerHTML.trim()){toast('Gere o comprovante antes de imprimir.');return}const proof=document.getElementById('rcProof').innerHTML;const w=window.open('','_blank');if(!w){toast('O navegador bloqueou a janela de impressão. Permita pop-ups para este site e tente novamente.');return}w.document.write(`<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>Comprovante RC ${escapeHTML(rcCurrentNumber)}</title><style>body{font:13px Arial,sans-serif;color:#17251f;padding:22px}h2{color:#174d36}table{width:100%;border-collapse:collapse;margin-top:16px}th{background:#174d36;color:#fff;text-align:left}td,th{padding:8px;border:1px solid #cbd5ce;font-size:11px}tr:nth-child(even){background:#f7faf8}.rcgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.rcsummary{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:14px 0}.rcmetric{border:1px solid #d8e3dc;padding:10px}.rcmetric small{display:block;color:#52645a}.rcmetric strong{font-size:20px}.rcstatus.ok{color:#176b45}.rcstatus.bad{color:#b33434}.rcstatus.warn{color:#9b6510}.rc-help{font-size:10px;color:#52645a}@media print{button{display:none}}</style></head><body>${proof}<script>window.onload=()=>window.print()<\/script></body></html>`);w.document.close()}
+function printRCProof(){if(!document.getElementById('rcProof').innerHTML.trim()){toast('Gere o comprovante antes de imprimir.');return}const proof=document.getElementById('rcProof').innerHTML;const w=window.open('','_blank');if(!w){toast('O navegador bloqueou a janela de impressão. Permita pop-ups para este site e tente novamente.');return}w.document.write(`<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>Comprovante RC ${escapeHTML(rcCurrentNumber)}</title><style>body{font:13px Arial,sans-serif;color:#17251f;padding:22px}h2{color:#174d36}table{width:100%;border-collapse:collapse;margin-top:16px}th{background:#174d36;color:#fff;text-align:left}td,th{padding:8px;border:1px solid #cbd5ce;font-size:11px}tr:nth-child(even){background:#f7faf8}.rcgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.rcsummary{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:14px 0}.rcmetric{border:1px solid #d8e3dc;padding:10px}.rcmetric small{display:block;color:#52645a}.rcmetric strong{font-size:20px}.rcstatus.ok{color:#176b45}.rcstatus.bad{color:#b33434}.rcstatus.warn{color:#9b6510}.rc-help{font-size:10px;color:#52645a}@media print{button{display:none}}</style></head><body>${proof}<script>window.onload=()=>window.print()<\/script>
+<script>
+(function(){
+ const overlay=document.getElementById('fs-login');
+ const form=document.getElementById('fs-login-form');
+ const msg=document.getElementById('fs-msg');
+ document.getElementById('fs-toggle').addEventListener('click',function(){
+   const p=document.getElementById('fs-senha'); p.type=p.type==='password'?'text':'password';
+   this.textContent=p.type==='password'?'◉':'◎';
+ });
+ document.getElementById('fs-forgot').addEventListener('click',function(){
+   msg.style.display='block'; msg.textContent='Na versão real, a recuperação de senha será feita pelo administrador autorizado. Esta demonstração não envia e-mails nem redefine senhas.';
+ });
+ form.addEventListener('submit',function(e){
+   e.preventDefault();
+   if(!form.reportValidity()) return;
+   overlay.style.display='none';
+   document.body.style.overflow='auto';
+ });
+})();
+</script>
+
+</body></html>`);w.document.close()}
 
 render();
 </script>
